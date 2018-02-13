@@ -10,16 +10,18 @@ public class Main {
         int base_array_size = 100_000_000;
 
         int max_collection_size = 100_000;
-        //нужно определить рост размера контейнера в зависимости от числа элементов
-        //аналогично посмотрим на размер отдельного объекта
-        for(int current_size = 1; current_size < max_collection_size; current_size *= 10 ) {
+
+        /**
+         *
+         */
+        for(int collection_size = 1; collection_size < max_collection_size; collection_size *= 10 ) {
             long mem = usedMemory();
             System.out.println("Used memory before " + mem);
 
-            Object[] array = new Object[current_size];
+            Object[] array = new Object[base_array_size];
 
             long mem2 = usedMemory();
-            double averageRef = 1.0d * (mem2 - mem)/current_size;
+            double averageRef = 1.0d * (mem2 - mem)/collection_size;
             System.out.println("Difference in memory " + (mem2 - mem));
             System.out.println("average memory per object reference " + averageRef);
 
@@ -36,12 +38,12 @@ public class Main {
             }
 
             long mem3 = usedMemory();
-            double averageObj = 1.0d * (mem3 - mem2)/current_size;
+            double averageObj = 1.0d * (mem3 - mem2)/collection_size;
             System.out.println("average memory per object " + averageObj);
 
-            System.out.println("Created " + current_size + " objects.");
+            System.out.println("Created " + collection_size + " objects.");
 
-            for(int i = 0; i < current_size; i++) {
+            for(int i = 0; i < collection_size; i++) {
                 array[i] = null;
             }
             array = null;
