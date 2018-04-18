@@ -60,10 +60,14 @@ public class MyArrayList<T> implements List<T> {
         return Arrays.copyOf(array, currentSize);
     }
 
-    //не понимаю этот метод
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        if (a.length < size())
+            return (T1[]) Arrays.copyOf(array, size(), a.getClass());
+        System.arraycopy(array, 0, a, 0, size());
+        if (a.length > size())
+            a[size()] = null;
+        return a;
     }
 
     @Override
@@ -163,14 +167,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        if(index < 0 || index > currentSize)
+        if(index < 0 || index >= currentSize)
             throw new RuntimeException("index out of bound exception");
         return (T) array[index];
     }
 
     @Override
     public T set(int index, T element) {
-        if(index < 0 || index > currentSize)
+        if(index < 0 || index > currentSize-1)
             throw new RuntimeException("index out of bound exception");
         array[index] = element;
         return element;
@@ -217,17 +221,17 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return null;
+        return new MyArrayListListIterator(this);
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        return null;
+        return new MyArrayListListIterator(this, index);
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+        throw new RuntimeException("should implement this method as well");
     }
 
     private class MyArrayListIterator implements Iterator<T> {
@@ -272,4 +276,105 @@ public class MyArrayList<T> implements List<T> {
             }
         }
     }
+
+    private class MyArrayListListIterator implements ListIterator<T> {
+        int index;
+        int fromIndex;
+        int toIndex;
+        MyArrayList<T> list;
+
+        public void Construct(MyArrayList<T> list, int fromIndex, int toIndex) {
+            this.list = list;
+            this.fromIndex = fromIndex;
+            this.toIndex = toIndex;
+            index = fromIndex;
+        }
+
+        public MyArrayListListIterator(MyArrayList<T> list, int fromIndex, int toIndex) {
+            Construct(list, fromIndex, toIndex);
+        }
+
+        public MyArrayListListIterator(MyArrayList<T> list, int fromIndex) {
+            Construct(list, fromIndex, list.size());
+        }
+
+        public MyArrayListListIterator(MyArrayList<T> list) {
+            Construct(list, 0, list.size());
+        }
+
+        @Override
+        public boolean hasNext() {
+            return (index < toIndex);
+        }
+
+        @Override
+        public T next() {
+            if(index < toIndex || index >= fromIndex) {
+                T result = list.get(index);
+                index++;
+                return result;
+            } else {
+                throw new RuntimeException("Concurrent modification exception");
+            }
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return (index > fromIndex);
+        }
+
+        @Override
+        public T previous() {
+            if(index > fromIndex && index < toIndex) {
+                return list.get(index - 1);
+            } else {
+                throw new RuntimeException("inconsistent state exception");
+            }
+        }
+
+        @Override
+        public int nextIndex() {
+            if(index < toIndex) {
+                return index + 1;
+            } else {
+                throw new RuntimeException("no next index exception");
+            }
+        }
+
+        @Override
+        public int previousIndex() {
+            if(index > fromIndex && index < toIndex) {
+                return index - 1;
+            } else {
+                throw new RuntimeException("no previous index exception");
+            }
+        }
+
+        @Override
+        public void remove() {
+            list.remove(index);
+            index--;
+            toIndex--;
+        }
+
+        @Override
+        public void forEachRemaining(Consumer<? super T> action) {
+            for(index = fromIndex; index < toIndex; index++) {
+                action.accept(list.get(index));
+            }
+        }
+
+        @Override
+        public void set(T t) {
+            list.set(index-1, t);
+        }
+
+        @Override
+        public void add(T t) {
+            list.add(index, t);
+            toIndex++;
+            index++;
+        }
+    }
+
 }
