@@ -1,19 +1,37 @@
 package ru.otus.homework06.model;
 
+import ru.otus.homework07.model.InitialState;
+import ru.otus.homework07.service.Service;
+
 import java.util.*;
 
 public class ATM {
     private Map<Banknote, Slot> slotMap = new HashMap<>();
+    private InitialState initialState;
+
+    public ATM(InitialState initialState) {
+        this.initialState = initialState;
+        initializeSlots();
+        restoreInitialState();
+    }
 
     public ATM() {
+        this(new InitialState(new BundleOfBanknotes()));
+    }
+
+    private void initializeSlots() {
         for(Banknote banknote : Rubles.banknotes) {
             slotMap.put(banknote, new Slot(banknote));
         }
     }
 
-    public void initialLoadCash(BundleOfBanknotes bundle) {
+    public void accept(Service visitor) {
+        visitor.visit(this);
+    }
+
+    public void restoreInitialState() {
         cleanCash();
-        addBundle(bundle);
+        addBundle(initialState.getInitialBundle());
     }
 
     public void addBundle(BundleOfBanknotes bundle) {
@@ -21,6 +39,10 @@ public class ATM {
             Slot slot = slotMap.get(banknote);
             slot.add(bundle.getCount(banknote));
         }
+    }
+
+    public void countAllBanknotes(BundleOfBanknotes countBundle) {
+        countBundle.add(countAllBanknotes());
     }
 
     public BundleOfBanknotes countAllBanknotes() {
@@ -33,8 +55,8 @@ public class ATM {
     }
 
     public void cleanCash() {
-        for(Banknote banknote : Rubles.banknotes) {
-            slotMap.get(banknote).setCount(0);
+        for(Slot slot : slotMap.values()) {
+            slot.setCount(0);
         }
     }
 

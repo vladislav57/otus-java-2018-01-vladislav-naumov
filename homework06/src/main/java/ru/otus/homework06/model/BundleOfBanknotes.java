@@ -33,4 +33,10 @@ public class BundleOfBanknotes{
     public int getCount(Banknote banknote) {
         return count.get(banknote);
     }
+
+    public void add(BundleOfBanknotes bundleOfBanknotes) {
+        for(Banknote banknote : Rubles.banknotes) {
+            count.put(banknote, count.get(banknote) + bundleOfBanknotes.getCount(banknote));
+        }
+    }
 }

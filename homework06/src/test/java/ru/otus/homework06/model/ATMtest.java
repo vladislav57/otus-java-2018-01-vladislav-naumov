@@ -2,6 +2,7 @@ package ru.otus.homework06.model;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.otus.homework07.model.InitialState;
 
 public class ATMtest {
 
@@ -47,9 +48,8 @@ public class ATMtest {
     }
 
     public ATM prepareATM() {
-        ATM atm = new ATM();
         BundleOfBanknotes bundle = prepareBundle();
-        atm.initialLoadCash(bundle);
+        ATM atm = new ATM(new InitialState(bundle));
         return atm;
     }
 
