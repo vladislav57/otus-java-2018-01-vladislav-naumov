@@ -15,7 +15,7 @@ import java.io.StringWriter;
 public class TestMyGson {
 
     @Test
-    public void testObjectWithString() throws FileNotFoundException {
+    public void testObjectWithString() throws FileNotFoundException, NoSuchFieldException, IllegalAccessException {
         ObjectWithString objectWithString = new ObjectWithString("testName");
 
         JsonObject myPrepatedJsonObject = MyGson.objectToJsonObject(objectWithString);
