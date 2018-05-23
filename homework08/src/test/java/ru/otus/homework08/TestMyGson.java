@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.otus.homework08.converter.MyGson;
-import ru.otus.homework08.model.ObjectWith8BasicTypes;
-import ru.otus.homework08.model.ObjectWithByteArray;
-import ru.otus.homework08.model.ObjectWithString;
-import ru.otus.homework08.model.ObjectWithTwoStrings;
+import ru.otus.homework08.model.*;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TestMyGson {
 
@@ -29,20 +28,30 @@ public class TestMyGson {
     }
 
     @Test
-    public void test8types() throws IllegalAccessException, ClassNotFoundException {
-        ObjectWith8BasicTypes objectWith8BasicTypes = new ObjectWith8BasicTypes(true, 'a', 1.1f, 1.5d, (byte) 1, (short) 10, 100, 1000L);
-        compareGoogleGsonStringAndMyGsonString(objectWith8BasicTypes);
+    public void testEightPrimitiveTypes() throws IllegalAccessException, ClassNotFoundException {
+        ObjectWithEightBasicTypes objectWithEightBasicTypes = new ObjectWithEightBasicTypes(true, 'a', 1.1f, 1.5d, (byte) 1, (short) 10, 100, 1000L);
+        compareGoogleGsonStringAndMyGsonString(objectWithEightBasicTypes);
     }
 
     @Test
-    public void testMyteArray() throws IllegalAccessException, ClassNotFoundException {
-        byte[] array = new byte[100];
-        for(int i=0; i<100; i++) {
-            array[i] = 0;
-        }
-        ObjectWithByteArray objectWithByteArray = new ObjectWithByteArray(array);
-        System.out.println();
+    public void testByteArray() throws IllegalAccessException, ClassNotFoundException {
+        ObjectWithByteArray objectWithByteArray = new ObjectWithByteArray(new byte[100]);
         compareGoogleGsonStringAndMyGsonString(objectWithByteArray);
+    }
+
+    @Test
+    public void testEightPrimitivesArrays() throws IllegalAccessException, ClassNotFoundException {
+        ObjectWithEightPrimitiveArrays objectWithEightPrimitiveArrays = new ObjectWithEightPrimitiveArrays(new boolean[10], new char[10], new float[10], new double[10], new byte[10], new short[10], new int[10], new long[10]);
+        compareGoogleGsonStringAndMyGsonString(objectWithEightPrimitiveArrays);
+    }
+
+    @Test
+    public void testArrayList() throws ClassNotFoundException, IllegalAccessException {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        ObjectWithArrayList objectWithArrayList = new ObjectWithArrayList(list);
+        compareGoogleGsonStringAndMyGsonString(objectWithArrayList);
     }
 
     private void compareGoogleGsonStringAndMyGsonString(Object object) throws IllegalAccessException, ClassNotFoundException {

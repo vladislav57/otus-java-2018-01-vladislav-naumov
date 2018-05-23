@@ -1,6 +1,6 @@
 package ru.otus.homework08.model;
 
-public class ObjectWith8BasicTypes {
+public class ObjectWithEightBasicTypes {
     private boolean booleanField;
     private char charType;
     private float floatType;
@@ -11,10 +11,10 @@ public class ObjectWith8BasicTypes {
     private int intType;
     private long longType;
 
-    public ObjectWith8BasicTypes() {
+    public ObjectWithEightBasicTypes() {
     }
 
-    public ObjectWith8BasicTypes(boolean booleanField, char charType, float floatType, double doubleType, byte byteType, short shortType, int intType, long longType) {
+    public ObjectWithEightBasicTypes(boolean booleanField, char charType, float floatType, double doubleType, byte byteType, short shortType, int intType, long longType) {
         this.booleanField = booleanField;
         this.charType = charType;
         this.floatType = floatType;
