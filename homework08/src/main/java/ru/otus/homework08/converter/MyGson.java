@@ -1,14 +1,12 @@
 package ru.otus.homework08.converter;
 
 import javax.json.*;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class MyGson {
-    public static JsonObject objectToJsonObject(Object object) throws IllegalAccessException, ClassNotFoundException {
-
+    public static JsonObjectBuilder createBuilderRecursivly(Object object) throws ClassNotFoundException, IllegalAccessException {
         Field[] fields = object.getClass().getDeclaredFields();
 
         for(Field field : fields) {
@@ -87,14 +85,67 @@ public class MyGson {
                 }
                 model.add(field.getName(), jab);
             } else if(field.getType().equals(Class.forName("java.util.ArrayList"))) {
+                System.out.println(Class.forName("java.util.ArrayList"));
                 JsonArrayBuilder jab = Json.createArrayBuilder();
-                for(Integer i : (ArrayList<Integer>) field.get(object)) {
-                    jab.add(i);
+                for(Object i : (ArrayList<Object>) field.get(object)) {
+                    jab.add(createBuilderRecursivly(i));
                 }
                 model.add("arrayList", jab);
             }
         }
 
-        return model.build();
+        return model;
+    }
+
+    private static JsonObjectBuilder buiderFromPrimitiveType(Object object) {
+        System.out.println(object.getClass());
+        JsonObjectBuilder model = Json.createObjectBuilder();
+        /*if(object.getClass().equals(String.class)) {
+            model.add((String) object);
+        } else if(object.getClass().equals(boolean.class)) {
+            model.add(field.getName(), field.getBoolean(object));
+        } else if(object.getClass().equals(char.class)) {
+            model.add(field.getName(), "" + field.getChar(object)); //JsonObjectBuilder не принимает на вход char, только String
+        } else if(object.getClass().equals(float.class)) {
+            model.add(field.getName(), Double.valueOf("" + field.getFloat(object))); // JsonObjectBuilder не принимает на вход float, только double
+        } else if(object.getClass().equals(double.class)) {
+            model.add(field.getName(), field.getDouble(object));
+        } else if(object.getClass().equals(byte.class)) {
+            model.add(field.getName(), field.getByte(object));
+        } else if(object.getClass().equals(short.class)) {
+            model.add(field.getName(), field.getShort(object));
+        } else if(object.getClass().equals(int.class)) {
+            model.add(field.getName(), field.getInt(object));
+        } else if(object.getClass().equals(long.class)) {
+            model.add(field.getName(), field.getLong(object));
+        }*/
+        return null;
+    }
+
+    private static boolean isVectorOfPrimitiveType(Object object) throws ClassNotFoundException {
+        Class aClass = object.getClass();
+        return (aClass.equals(Class.forName("[Z")) || aClass.equals(Class.forName("[C")) || aClass.equals(Class.forName("[F")) || aClass.equals(Class.forName("[D")) || aClass.equals(Class.forName("[B")) || aClass.equals(Class.forName("[S")) || aClass.equals(Class.forName("[I")) || aClass.equals(Class.forName("[J")));
+    }
+
+    private static boolean isString(Object object) {
+        return object.getClass().equals(String.class);
+    }
+
+    private static boolean isOfPrimitiveTypeWrapper(Object object) {
+        Class aClass = object.getClass();
+        return (aClass.equals(Boolean.class) || aClass.equals(Character.class) || aClass.equals(Float.class) || aClass.equals(Double.class) || aClass.equals(Byte.class) || aClass.equals(Short.class) || aClass.equals(Integer.class) || aClass.equals(Long.class));
+    }
+
+    private static boolean isOfPrymitiveType(Object object) {
+        Class aClass = object.getClass();
+        return (aClass.equals(boolean.class) || aClass.equals(char.class) || aClass.equals(float.class) || aClass.equals(double.class) || aClass.equals(byte.class) || aClass.equals(short.class) || aClass.equals(int.class) || aClass.equals(long.class));
+    }
+
+    public static JsonObject objectToJsonObject(Object object) throws IllegalAccessException, ClassNotFoundException {
+
+        JsonObjectBuilder jsonObjectBuilder = createBuilderRecursivly(object);
+        return jsonObjectBuilder.build();
+
+
     }
 }

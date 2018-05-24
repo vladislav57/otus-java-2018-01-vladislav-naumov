@@ -47,22 +47,41 @@ public class TestMyGson {
 
     @Test
     public void testArrayList() throws ClassNotFoundException, IllegalAccessException {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        ObjectWithArrayList objectWithArrayList = new ObjectWithArrayList(list);
-        compareGoogleGsonStringAndMyGsonString(objectWithArrayList);
+        ArrayList<Integer> listInteger = new ArrayList<>();
+        listInteger.add(1);
+        listInteger.add(2);
+        ObjectWithArrayList objectWithIntegerArrayList = new ObjectWithArrayList(listInteger);
+        compareGoogleGsonStringAndMyGsonString(objectWithIntegerArrayList);
+        ArrayList<Float> listFloat = new ArrayList<>();
+        listFloat.add(1.0f);
+        listFloat.add(2.0f);
+        ObjectWithArrayList objectWithFloatArrayList = new ObjectWithArrayList(listFloat);
+        compareGoogleGsonStringAndMyGsonString(objectWithFloatArrayList);
+    }
+
+    @Test
+    public void testGsonInteger() {
+        Gson gson = new Gson();
+        String gsonString = gson.toJson(new Integer(5));
+        System.out.println(gsonString);
+    }
+
+    @Test
+    public void testGsonArray() {
+        Gson gson = new Gson();
+        String gsonString = gson.toJson(Arrays.asList(1, 2, 3));
+        System.out.println(gsonString);
     }
 
     private void compareGoogleGsonStringAndMyGsonString(Object object) throws IllegalAccessException, ClassNotFoundException {
-            JsonObject myPrepatedJsonObject = MyGson.objectToJsonObject(object);
-            String myString = writeToString(myPrepatedJsonObject);
+        JsonObject myPrepatedJsonObject = MyGson.objectToJsonObject(object);
+        String myString = writeToString(myPrepatedJsonObject);
 
-            Gson gson = new Gson();
-            String gsonString = gson.toJson(object);
+        Gson gson = new Gson();
+        String gsonString = gson.toJson(object);
 
-            Assert.assertEquals(myString, gsonString);
-        }
+        Assert.assertEquals(myString, gsonString);
+    }
 
     private String writeToString(JsonObject jsonst) {
         StringWriter stWriter = new StringWriter();
