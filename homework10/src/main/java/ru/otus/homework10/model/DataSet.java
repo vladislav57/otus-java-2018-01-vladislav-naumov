@@ -2,26 +2,26 @@ package ru.otus.homework10.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
-@Table( name = "EVENTS" )
+@Table( name = "userdata" )
 public abstract class DataSet {
 
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
-    long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
+    protected long userId;
 
-    public long getId() {
-        return id;
+    public DataSet() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

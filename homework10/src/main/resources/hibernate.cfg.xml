@@ -30,6 +30,9 @@
 
         <mapping class="ru.otus.homework10.model.DataSet" />
         <mapping class="ru.otus.homework10.model.UserDataSet" />
+        <mapping class="ru.otus.homework10.model.PhoneDataSet" />
+        <mapping class="ru.otus.homework10.model.AddressDataSet" />
+
 
     </session-factory>
 

@@ -3,6 +3,8 @@ package ru.otus.homework10.database;
 import org.hibernate.Session;
 import ru.otus.homework10.model.UserDataSet;
 
+import java.util.Set;
+
 public class UserDataSetDAO {
 
     private Session session;
@@ -18,4 +20,5 @@ public class UserDataSetDAO {
     public UserDataSet load(long id) {
         return new UserDataSet(session.load(UserDataSet.class, id));
     }
+
 }

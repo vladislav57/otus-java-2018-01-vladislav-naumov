@@ -1,20 +1,50 @@
 package ru.otus.homework10.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class UserDataSet extends DataSet {
 
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "age")
     private int age;
+
+    @OneToMany(mappedBy = "userDataSet", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<PhoneDataSet> phones = new HashSet<PhoneDataSet>();
+
+    @OneToOne(mappedBy = "userDataSet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AddressDataSet address;
 
     public UserDataSet() {
     }
 
-    public UserDataSet(UserDataSet load) {
-        this.id = load.getId();
-        this.age = load.getAge();
-        this.name = load.getName();
+    public UserDataSet(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public UserDataSet(UserDataSet uds) {
+        this.name = uds.getName();
+        this.age = uds.getAge();
+        this.address = uds.getAddress();
+        this.phones = uds.getPhones();
+    }
+
+    public UserDataSet(String name, int age, Set<PhoneDataSet> phones) {
+        this.name = name;
+        this.age = age;
+        this.phones = phones;
+    }
+
+    public UserDataSet(String name, int age, Set<PhoneDataSet> phones, AddressDataSet address) {
+        this.name = name;
+        this.age = age;
+        this.phones = phones;
+        this.address = address;
     }
 
     public String getName() {
@@ -25,6 +55,14 @@ public class UserDataSet extends DataSet {
         return age;
     }
 
+    public Set<PhoneDataSet> getPhones() {
+        return phones;
+    }
+
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -33,10 +71,12 @@ public class UserDataSet extends DataSet {
         this.age = age;
     }
 
-    public UserDataSet(long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+    public void setPhones(Set<PhoneDataSet> phones) {
+        this.phones = phones;
+    }
+
+    public void setAddress(AddressDataSet address) {
+        this.address = address;
     }
 
     @Override
@@ -44,8 +84,9 @@ public class UserDataSet extends DataSet {
         return "UserDataSet{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
-                ", id=" + id +
+                ", phones=" + phones +
+                ", address=" + address +
+                ", userId=" + userId +
                 '}';
     }
-
 }

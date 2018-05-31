@@ -9,6 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import ru.otus.homework10.model.UserDataSet;
 
+import java.util.Set;
 import java.util.function.Function;
 
 public class DBServiceImpl implements DBService {
@@ -16,15 +17,16 @@ public class DBServiceImpl implements DBService {
     private SessionFactory sessionFactory;
 
     public DBServiceImpl() {
+        System.out.println("enter constructor");
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
+            System.out.println("start build session factory");
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            System.out.println("Build session factory");
         }
         catch (Exception e) {
-            // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-            // so destroy it manually.
             StandardServiceRegistryBuilder.destroy( registry );
         }
     }
@@ -52,6 +54,7 @@ public class DBServiceImpl implements DBService {
             return dao.load(id);
         });
     }
+
 
     private <R> R runInSession(Function<Session, R> function) {
         try (Session session = sessionFactory.openSession()) {
