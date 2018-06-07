@@ -1,6 +1,5 @@
 package homework11;
 
-import homework10.database.DBService;
 import homework10.model.UserDataSet;
 
 import java.lang.ref.WeakReference;
@@ -15,15 +14,13 @@ public class CacheEngineImpl implements CacheEngine {
     private int hitCount = 0;
     private int missCount = 0;
     private Map<Long, WeakReference<UserDataSet>> elements = new HashMap<>();
-    private DBService dbService;
 
     private final Timer timer = new Timer();
     private final long lifeTimeMs;
     private final long idleTimeMs;
     private final boolean isEternal;
 
-    public CacheEngineImpl(DBService service, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
-        this.dbService = service;
+    public CacheEngineImpl(long lifeTimeMs, long idleTimeMs, boolean isEternal) {
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
         this.idleTimeMs = idleTimeMs > 0 ? idleTimeMs : 0;
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
@@ -31,8 +28,6 @@ public class CacheEngineImpl implements CacheEngine {
 
     @Override
     public void save(UserDataSet uds) {
-        long id = dbService.save(uds);
-        uds.setUserId(id);
         putWeak(uds);
     }
 
@@ -48,10 +43,7 @@ public class CacheEngineImpl implements CacheEngine {
             return uds;
         } else {
             missCount++;
-            uds = dbService.load(id);
-            uds.setUserId(id);
-            putWeak(uds);
-            return uds;
+            return null;
         }
     }
 
