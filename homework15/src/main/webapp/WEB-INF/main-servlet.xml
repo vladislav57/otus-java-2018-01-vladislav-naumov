@@ -23,13 +23,34 @@
     </bean>
 
     <bean id="Timer" class="java.util.Timer"></bean>
+
+    <bean id="dbServiceAddress" class="homework15.messageSystem.Address"></bean>
+    <bean id="cachedDBServiceAddress" class="homework15.messageSystem.Address"></bean>
     <bean id="dbService" class="homework10.database.DBServiceImpl">
+        <constructor-arg ref="dbServiceAddress"/>
+        <constructor-arg ref="msContext"/>
         <constructor-arg ref="sessionFactory"/>
     </bean>
     <bean id="cacheEngine" class="homework11.CacheEngineImpl"></bean>
-    <bean id="cachedDBService" class="homework11.CachedDBServiceImpl">
+    <bean id="cachedDBService" class="homework11.CachedDBServiceImpl" init-method="init">
+        <constructor-arg ref="cachedDBServiceAddress"/>
+        <constructor-arg ref="msContext"/>
         <constructor-arg ref="cacheEngine"/>
         <constructor-arg ref="dbService"/>
+    </bean>
+
+    <bean id="frontServiceAddress" class="homework15.messageSystem.Address"></bean>
+    <bean id="frontendService" class="homework15.front.FrontendServiceImpl" init-method="init">
+        <constructor-arg ref="msContext"/>
+        <constructor-arg ref="frontServiceAddress"/>
+    </bean>
+
+    <bean id="messageSystem" class="homework15.messageSystem.MessageSystem"
+    init-method="start" destroy-method="dispose"></bean>
+    <bean id="msContext" class="homework15.app.MessageSystemContext">
+        <constructor-arg ref="messageSystem"/>
+        <constructor-arg ref="frontServiceAddress"/>
+        <constructor-arg ref="cachedDBServiceAddress"/>
     </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -45,7 +66,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
                 <prop key="connection.pool_size">5</prop>
             </props>

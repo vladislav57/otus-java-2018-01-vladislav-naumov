@@ -1,6 +1,9 @@
 package homework10.database;
 
 import homework10.model.UserDataSet;
+import homework15.app.MessageSystemContext;
+import homework15.messageSystem.Address;
+import homework15.messageSystem.MessageSystem;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,9 +12,13 @@ import java.util.function.Function;
 
 public class DBServiceImpl implements DBService {
 
+    private final Address address;
+    private final MessageSystemContext context;
     private SessionFactory sessionFactory;
 
-    public DBServiceImpl(SessionFactory sessionFactory) {
+    public DBServiceImpl(Address address, MessageSystemContext context, SessionFactory sessionFactory) {
+        this.address = address;
+        this.context = context;
         this.sessionFactory = sessionFactory;
     }
 
@@ -47,6 +54,16 @@ public class DBServiceImpl implements DBService {
             transaction.commit();
             return result;
         }
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public MessageSystem getMS() {
+        return context.getMessageSystem();
     }
 
 }

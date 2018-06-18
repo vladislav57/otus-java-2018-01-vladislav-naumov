@@ -1,0 +1,4 @@
+{
+    "HitCount":${hitCount},
+    "MissCount":${missCount}
+}

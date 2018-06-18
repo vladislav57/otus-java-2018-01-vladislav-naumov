@@ -13,6 +13,12 @@ public class UserDataSet extends DataSet {
     @Column(name = "age")
     private int age;
 
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "password")
+    private String password;
+
     @OneToMany(mappedBy = "userDataSet", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<PhoneDataSet> phones = new HashSet<PhoneDataSet>();
 
@@ -34,15 +40,11 @@ public class UserDataSet extends DataSet {
         this.phones = uds.getPhones();
     }
 
-    public UserDataSet(String name, int age, Set<PhoneDataSet> phones) {
+    public UserDataSet(String name, int age, String login, String password, Set<PhoneDataSet> phones, AddressDataSet address) {
         this.name = name;
         this.age = age;
-        this.phones = phones;
-    }
-
-    public UserDataSet(String name, int age, Set<PhoneDataSet> phones, AddressDataSet address) {
-        this.name = name;
-        this.age = age;
+        this.login = login;
+        this.password = password;
         this.phones = phones;
         this.address = address;
     }
@@ -53,6 +55,14 @@ public class UserDataSet extends DataSet {
 
     public int getAge() {
         return age;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public Set<PhoneDataSet> getPhones() {
@@ -79,11 +89,21 @@ public class UserDataSet extends DataSet {
         this.address = address;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "UserDataSet{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", phones=" + phones +
                 ", address=" + address +
                 ", userId=" + userId +

@@ -18,6 +18,9 @@ public class MainController {
     @Autowired
     private CacheEngine cacheEngine;
 
+    //@Autowired
+    //private FrontendService frontendService;
+
     @RequestMapping("/index")
     public ModelAndView index() {
         for (int i=0; i<100; i++) {
@@ -25,9 +28,6 @@ public class MainController {
         }
 
         UserDataSet resultuds = cachedDBService.load(1L);
-        System.out.println(resultuds);
-        System.out.println("Cache hit: " + cacheEngine.getHitCount());
-        System.out.println("Cache miss: " + cacheEngine.getMissCount());
 
         resultuds = null;
         try {
@@ -38,9 +38,6 @@ public class MainController {
         System.gc();
 
         UserDataSet timedResult = cachedDBService.load(1L);
-        System.out.println(timedResult);
-        System.out.println("Cache hit: " + cacheEngine.getHitCount());
-        System.out.println("Cache miss: " + cacheEngine.getMissCount());
 
         ModelAndView model = new ModelAndView();
         model.addObject("hitCount", cacheEngine.getHitCount());
