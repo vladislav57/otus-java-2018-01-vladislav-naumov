@@ -5,11 +5,13 @@
     <script>
         function sendRequest() {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/controller/cachecountersjson", false);
+            xhr.open("GET", "/controller/cachecountersjson", true);
             xhr.send();
-            var data = JSON.parse(xhr.responseText);
-            document.getElementById("hit").textContent = data["HitCount"];
-            document.getElementById("miss").textContent = data["MissCount"];
+            xhr.onreadystatechange = function () {
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById("hit").textContent = data["HitCount"];
+                document.getElementById("miss").textContent = data["MissCount"];
+            }
         }
     </script>
 </head>
