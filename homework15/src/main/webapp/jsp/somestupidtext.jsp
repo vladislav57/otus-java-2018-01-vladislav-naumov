@@ -1,1 +1,0 @@
-Here is placed some stupid text

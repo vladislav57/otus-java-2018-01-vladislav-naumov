@@ -17,8 +17,8 @@ public class TestController {
         return model;
     }
 
-    @RequestMapping("/testtext")
+    @RequestMapping("/cachecountersjson")
     public String testtext() {
-        return "somestupidtext";
+        return "cachecountersjson";
     }
 }

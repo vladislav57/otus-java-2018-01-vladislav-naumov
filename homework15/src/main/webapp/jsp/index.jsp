@@ -5,19 +5,21 @@
     <script>
         function sendRequest() {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/controller/test", false);
+            xhr.open("GET", "/controller/cachecountersjson", false);
             xhr.send();
-            alert(xhr.responseText);
+            var data = JSON.parse(xhr.responseText);
+            document.getElementById("hit").textContent = data["HitCount"];
+            document.getElementById("miss").textContent = data["MissCount"];
         }
     </script>
 </head>
     <body>
         <table>
             <tr>
-                <td>Hit count: </td><td>${hitCount}</td>
+                <td>Hit count: </td><td id="hit">${hitCount}</td>
             </tr>
             <tr>
-                <td>Miss count: </td><td>${missCount}</td>
+                <td>Miss count: </td><td id="miss">${missCount}</td>
             </tr>
         </table>
     </body>

@@ -14,6 +14,6 @@
         <url-pattern>/index.jsp</url-pattern>
         <url-pattern>/controller/index</url-pattern>
         <url-pattern>/controller/test</url-pattern>
-        <url-pattern>/controller/testtext</url-pattern>
+        <url-pattern>/controller/cachecountersjson</url-pattern>
     </servlet-mapping>
 </web-app>
