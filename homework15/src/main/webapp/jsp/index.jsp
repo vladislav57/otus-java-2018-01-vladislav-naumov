@@ -3,6 +3,8 @@
 <head>
     <title>Title</title>
     <script>
+        var stompClient = null;
+
         function sendRequest() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/controller/cachecountersjson", true);
@@ -12,6 +14,24 @@
                 document.getElementById("hit").textContent = data["HitCount"];
                 document.getElementById("miss").textContent = data["MissCount"];
             }
+        }
+        function connect() {
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+            });
+        }
+
+        function disconnect() {
+            if(stompClient != null) {
+                stompClient.disconnect();
+            }
+            console.log("Disconnected");
+        }
+
+        function sendMessage() {
+            stompClient.send("/app/chat", {}, "");
         }
     </script>
 </head>
@@ -27,5 +47,14 @@
     </body>
     <div>
         <button name="toPress" onclick="sendRequest()">Press me</button>
+    </div>
+    <div>
+        <button name="toPress" onclick="connect()">Connect</button>
+    </div>
+    <div>
+        <button name="toPress" onclick="sendMessage()">Send message</button>
+    </div>
+    <div>
+        <button name="toPress" onclick="disconnect()">Disconnect</button>
     </div>
 </html>
